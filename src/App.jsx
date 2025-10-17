@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import Layout from './components/Layout';
 import LoginPage from './pages/LoginPage';
 import AnnouncementPage from './pages/AnnouncementPage';
 
-const ProtectedLayout = () => {
-  const user = JSON.parse(localStorage.getItem('user'));
+const ProtectedLayout = ({ user }) => {
   if (!user) {
     return <Navigate to="/" />;
   }
@@ -17,22 +16,21 @@ const ProtectedLayout = () => {
 };
 
 function App() {
-  const user = JSON.parse(localStorage.getItem('user'));
+  // Manage user state here, initializing from localStorage
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
 
   return (
     <Routes>
       <Route 
         path="/" 
-        // --- CHANGE IS HERE ---
-        element={!user ? <LoginPage /> : <Navigate to="/announcements" />} 
+        element={!user ? <LoginPage setUser={setUser} /> : <Navigate to="/announcements" />} 
       />
       
-      <Route element={<ProtectedLayout />}>
+      <Route element={<ProtectedLayout user={user} />}>
         <Route path="/announcements" element={<AnnouncementPage />} />
         {/* All other protected pages will go here */}
       </Route>
 
-      {/* The old /dashboard route has been removed */}
       <Route path="*" element={<h1>404 Not Found</h1>} />
     </Routes>
   );
