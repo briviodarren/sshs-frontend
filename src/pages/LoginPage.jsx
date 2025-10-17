@@ -30,6 +30,8 @@ const LoginPage = () => {
     }));
   };
 
+ // ... inside LoginPage.jsx
+
   const onSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -58,6 +60,8 @@ const LoginPage = () => {
       setError(message);
     }
   };
+
+// ... rest of the file
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
