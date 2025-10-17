@@ -1,41 +1,45 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import Layout from './components/Layout';
 import LoginPage from './pages/LoginPage';
 import AnnouncementPage from './pages/AnnouncementPage';
+// We will create the other pages as we build them.
 
-// This component protects all the inner pages
-const ProtectedLayout = ({ user, setUser }) => {
+// This component protects routes and wraps them in the main layout.
+const ProtectedLayout = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+
   if (!user) {
     return <Navigate to="/" />;
   }
-  // It passes the user info down to the Layout (Sidebar/Header)
+
   return (
-    <Layout user={user} setUser={setUser}>
-      <Outlet />
+    <Layout>
+      <Outlet /> {/* This will render the matched child route component */}
     </Layout>
   );
 };
 
 function App() {
-  // We manage the logged-in user here, getting the initial value from localStorage
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
+  const user = JSON.parse(localStorage.getItem('user'));
 
   return (
     <Routes>
       <Route 
         path="/" 
-        // If no user, show LoginPage and give it the ability to set the user.
-        // If there IS a user, redirect to announcements.
-        element={!user ? <LoginPage setUser={setUser} /> : <Navigate to="/announcements" />} 
+        element={!user ? <LoginPage /> : <Navigate to="/announcements" />} 
       />
       
-      {/* All protected routes are nested here */}
-      <Route element={<ProtectedLayout user={user} setUser={setUser} />}>
+      {/* All routes inside here will have the sidebar and header */}
+      <Route element={<ProtectedLayout />}>
         <Route path="/announcements" element={<AnnouncementPage />} />
-        {/* We will add /assignments, /grades, etc. here later */}
+        {/* Add routes for all other pages here later. For example:
+          <Route path="/assignments" element={<AssignmentPage />} />
+          <Route path="/grades" element={<GradesPage />} />
+        */}
       </Route>
 
+      {/* Optional: A catch-all route for 404 pages */}
       <Route path="*" element={<h1>404 Not Found</h1>} />
     </Routes>
   );

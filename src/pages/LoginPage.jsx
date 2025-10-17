@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import authService from '../services/authService';
 
-// We accept `setUser` as a prop from App.jsx
-const LoginPage = ({ setUser }) => {
+const LoginPage = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -14,6 +13,7 @@ const LoginPage = ({ setUser }) => {
   const { email, password } = formData;
   const navigate = useNavigate();
 
+  // On component mount, check for remembered email
   useEffect(() => {
     const rememberedEmail = localStorage.getItem('rememberedEmail');
     if (rememberedEmail) {
@@ -21,6 +21,7 @@ const LoginPage = ({ setUser }) => {
       setRememberMe(true);
     }
   }, []);
+
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -31,24 +32,23 @@ const LoginPage = ({ setUser }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError(''); // Clear previous errors
 
     try {
       const userData = { email, password };
-      const loggedInUser = await authService.login(userData);
+      const user = await authService.login(userData);
 
+      // Handle "Remember Me"
       if (rememberMe) {
         localStorage.setItem('rememberedEmail', email);
       } else {
         localStorage.removeItem('rememberedEmail');
       }
       
-      // THE FIX:
-      // 1. Update the app's state with the user who just logged in
-      setUser(loggedInUser);
-      // 2. Navigate to the announcements page
-      navigate('/announcements');
-      // 3. NO MORE window.location.reload()
+      // Navigate to a dashboard/home page after successful login
+      // We will create the dashboard later
+      navigate('/dashboard'); 
+      window.location.reload(); // Force reload to update app state
 
     } catch (err) {
       const message =
@@ -59,7 +59,6 @@ const LoginPage = ({ setUser }) => {
     }
   };
 
-  // The JSX for the form remains exactly the same
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-xl shadow-lg">
@@ -67,6 +66,7 @@ const LoginPage = ({ setUser }) => {
           <h1 className="text-4xl font-bold text-gray-800">SSHS</h1>
           <p className="mt-2 text-gray-500">St. Stanislaus High School Portal</p>
         </div>
+
         <form className="mt-8 space-y-6" onSubmit={onSubmit}>
           {error && (
             <div className="p-3 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">
@@ -76,24 +76,40 @@ const LoginPage = ({ setUser }) => {
           <div className="space-y-4 rounded-md shadow-sm">
             <div>
               <input
-                id="email-address" name="email" type="email" required
-                className="relative block w-full px-3 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                placeholder="Email address" value={email} onChange={onChange}
+                id="email-address"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                className="relative block w-full px-3 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                placeholder="Email address"
+                value={email}
+                onChange={onChange}
               />
             </div>
             <div>
               <input
-                id="password" name="password" type="password" required
-                className="relative block w-full px-3 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                placeholder="Password" value={password} onChange={onChange}
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+                className="relative block w-full px-3 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                placeholder="Password"
+                value={password}
+                onChange={onChange}
               />
             </div>
           </div>
+
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <input
-                id="remember-me" name="remember-me" type="checkbox"
-                checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)}
+                id="remember-me"
+                name="remember-me"
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
                 className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
               />
               <label htmlFor="remember-me" className="block ml-2 text-sm text-gray-900">
@@ -101,6 +117,7 @@ const LoginPage = ({ setUser }) => {
               </label>
             </div>
           </div>
+
           <div>
             <button
               type="submit"
