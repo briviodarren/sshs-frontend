@@ -29,7 +29,7 @@ const LoginPage = ({ setUser }) => {
     }));
   };
 
-  const onSubmit = async (e) => {
+const onSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
@@ -43,15 +43,12 @@ const LoginPage = ({ setUser }) => {
         localStorage.removeItem('rememberedEmail');
       }
       
-      // --- THE FIX ---
-      // 1. Update the state in App.jsx
       setUser(loggedInUser);
-      // 2. Navigate to the new page
       navigate('/announcements');
-      // 3. The window.location.reload() line has been removed.
-      // ---------------
 
-    } catch (err) => {
+    // --- THIS IS THE CORRECTED LINE ---
+    } catch (err) {
+    // ---------------------------------
       const message =
         (err.response && err.response.data && err.response.data.message) ||
         err.message ||
