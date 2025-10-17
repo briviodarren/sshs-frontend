@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://sshsbackend-wscb0c1s.b4a.run/api/users/';
+const API_URL = 'https://sshsbackend-ax2ps8id.b4a.run/api/users/';
 
 // Login user
 const login = async (userData) => {

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // The API_URL must point to the specific endpoint for announcements
-const API_URL = 'https://sshsbackend-wscb0c1s.b4a.run/api/announcements/';
+const API_URL = 'https://sshsbackend-ax2ps8id.b4a.run/api/announcements/';
 
 const getToken = () => {
   const user = JSON.parse(localStorage.getItem('user'));
