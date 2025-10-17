@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import authService from '../services/authService';
 
-const LoginPage = () => {
+// We accept `setUser` as a prop from App.jsx
+const LoginPage = ({ setUser }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -34,7 +35,7 @@ const LoginPage = () => {
 
     try {
       const userData = { email, password };
-      await authService.login(userData);
+      const loggedInUser = await authService.login(userData);
 
       if (rememberMe) {
         localStorage.setItem('rememberedEmail', email);
@@ -42,11 +43,12 @@ const LoginPage = () => {
         localStorage.removeItem('rememberedEmail');
       }
       
-      // Redirects to the dashboard
-      navigate('/dashboard'); 
-      
-      // Forces a page reload
-      window.location.reload();
+      // THE FIX:
+      // 1. Update the app's state with the user who just logged in
+      setUser(loggedInUser);
+      // 2. Navigate to the announcements page
+      navigate('/announcements');
+      // 3. NO MORE window.location.reload()
 
     } catch (err) {
       const message =
@@ -57,7 +59,7 @@ const LoginPage = () => {
     }
   };
 
-  // The JSX for the form remains the same
+  // The JSX for the form remains exactly the same
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-xl shadow-lg">
