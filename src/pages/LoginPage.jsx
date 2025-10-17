@@ -30,7 +30,7 @@ const LoginPage = () => {
     }));
   };
 
- // ... inside LoginPage.jsx
+  // ... inside LoginPage.jsx
 
   const onSubmit = async (e) => {
     e.preventDefault();
