@@ -1,13 +1,14 @@
 import axios from 'axios';
 
-const API_URL = 'https://sshsbackend-wscb0c1s.b4a.run/api/users/';
+// The API_URL must point to the specific endpoint for announcements
+const API_URL = 'https://sshsbackend-wscb0c1s.b4a.run/api/announcements/';
 
 const getToken = () => {
   const user = JSON.parse(localStorage.getItem('user'));
   return user ? user.token : null;
 };
 
-// Teacher functions
+// Teacher & Admin: Post a new announcement
 const postAnnouncement = async (announcementData) => {
   const token = getToken();
   const config = {
@@ -20,6 +21,7 @@ const postAnnouncement = async (announcementData) => {
   return response.data;
 };
 
+// Teacher: Get all announcements
 const getTeacherAnnouncements = async () => {
   const token = getToken();
   const config = {
@@ -27,11 +29,12 @@ const getTeacherAnnouncements = async () => {
       Authorization: `Bearer ${token}`,
     },
   };
+  // This correctly calls .../api/announcements/teacher
   const response = await axios.get(API_URL + 'teacher', config);
   return response.data;
 };
 
-// Student functions
+// Student: Get all announcements
 const getStudentAnnouncements = async () => {
   const token = getToken();
   const config = {
@@ -39,10 +42,12 @@ const getStudentAnnouncements = async () => {
       Authorization: `Bearer ${token}`,
     },
   };
+  // This correctly calls .../api/announcements/student
   const response = await axios.get(API_URL + 'student', config);
   return response.data;
 };
 
+// Student: Mark an announcement as viewed
 const markAnnouncementAsViewed = async (announcementId) => {
   const token = getToken();
   const config = {
@@ -50,11 +55,12 @@ const markAnnouncementAsViewed = async (announcementId) => {
       Authorization: `Bearer ${token}`,
     },
   };
+  // This correctly calls .../api/announcements/{id}/view
   const response = await axios.post(API_URL + `${announcementId}/view`, {}, config);
   return response.data;
 };
 
-// Admin functions
+// Admin: Get all announcements
 const getAllAnnouncementsAdmin = async () => {
   const token = getToken();
   const config = {
@@ -62,11 +68,12 @@ const getAllAnnouncementsAdmin = async () => {
       Authorization: `Bearer ${token}`,
     },
   };
+  // This correctly calls .../api/announcements/admin
   const response = await axios.get(API_URL + 'admin', config);
   return response.data;
 };
 
-// Shared functions
+// Teacher & Admin: Delete an announcement
 const deleteAnnouncement = async (announcementId) => {
   const token = getToken();
   const config = {
@@ -74,6 +81,7 @@ const deleteAnnouncement = async (announcementId) => {
       Authorization: `Bearer ${token}`,
     },
   };
+  // This correctly calls .../api/announcements/{id}
   const response = await axios.delete(API_URL + announcementId, config);
   return response.data;
 };
