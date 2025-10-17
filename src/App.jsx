@@ -1,45 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import Layout from './components/Layout';
 import LoginPage from './pages/LoginPage';
 import AnnouncementPage from './pages/AnnouncementPage';
-// We will create the other pages as we build them.
 
-// This component protects routes and wraps them in the main layout.
-const ProtectedLayout = () => {
-  const user = JSON.parse(localStorage.getItem('user'));
-
+// This component protects all inner pages and wraps them in the main layout
+const ProtectedLayout = ({ user, setUser }) => {
   if (!user) {
     return <Navigate to="/" />;
   }
-
   return (
-    <Layout>
-      <Outlet /> {/* This will render the matched child route component */}
+    <Layout user={user} setUser={setUser}>
+      <Outlet />
     </Layout>
   );
 };
 
 function App() {
-  const user = JSON.parse(localStorage.getItem('user'));
+  // The user's login status is managed here for the whole app
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
 
   return (
     <Routes>
       <Route 
         path="/" 
-        element={!user ? <LoginPage /> : <Navigate to="/announcements" />} 
+        // If no user, show LoginPage. If a user IS logged in, redirect to announcements.
+        element={!user ? <LoginPage setUser={setUser} /> : <Navigate to="/announcements" />} 
       />
       
-      {/* All routes inside here will have the sidebar and header */}
-      <Route element={<ProtectedLayout />}>
+      {/* All pages that require a login are nested inside here */}
+      <Route element={<ProtectedLayout user={user} setUser={setUser} />}>
         <Route path="/announcements" element={<AnnouncementPage />} />
-        {/* Add routes for all other pages here later. For example:
-          <Route path="/assignments" element={<AssignmentPage />} />
-          <Route path="/grades" element={<GradesPage />} />
-        */}
+        {/* We will add /assignments, /grades, etc. here later */}
       </Route>
 
-      {/* Optional: A catch-all route for 404 pages */}
       <Route path="*" element={<h1>404 Not Found</h1>} />
     </Routes>
   );

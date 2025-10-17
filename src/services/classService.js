@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://sshsbackend-wscb0c1s.b4a.run/api/users/';
+const API_URL = 'https://sshs-backend-cvf9cbkpv-briviodarrens-projects.vercel.app/api/users/';
 
 const getToken = () => {
   const user = JSON.parse(localStorage.getItem('user'));
