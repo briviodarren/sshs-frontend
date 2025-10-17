@@ -3,19 +3,15 @@ import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import Layout from './components/Layout';
 import LoginPage from './pages/LoginPage';
 import AnnouncementPage from './pages/AnnouncementPage';
-// We will create the other pages as we build them.
 
-// This component protects routes and wraps them in the main layout.
 const ProtectedLayout = () => {
   const user = JSON.parse(localStorage.getItem('user'));
-
   if (!user) {
     return <Navigate to="/" />;
   }
-
   return (
     <Layout>
-      <Outlet /> {/* This will render the matched child route component */}
+      <Outlet />
     </Layout>
   );
 };
@@ -27,19 +23,16 @@ function App() {
     <Routes>
       <Route 
         path="/" 
+        // --- CHANGE IS HERE ---
         element={!user ? <LoginPage /> : <Navigate to="/announcements" />} 
       />
       
-      {/* All routes inside here will have the sidebar and header */}
       <Route element={<ProtectedLayout />}>
         <Route path="/announcements" element={<AnnouncementPage />} />
-        {/* Add routes for all other pages here later. For example:
-          <Route path="/assignments" element={<AssignmentPage />} />
-          <Route path="/grades" element={<GradesPage />} />
-        */}
+        {/* All other protected pages will go here */}
       </Route>
 
-      {/* Optional: A catch-all route for 404 pages */}
+      {/* The old /dashboard route has been removed */}
       <Route path="*" element={<h1>404 Not Found</h1>} />
     </Routes>
   );

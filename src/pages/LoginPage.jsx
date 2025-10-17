@@ -32,23 +32,23 @@ const LoginPage = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setError(''); // Clear previous errors
+    setError('');
 
     try {
       const userData = { email, password };
       const user = await authService.login(userData);
 
-      // Handle "Remember Me"
       if (rememberMe) {
         localStorage.setItem('rememberedEmail', email);
       } else {
         localStorage.removeItem('rememberedEmail');
       }
       
-      // Navigate to a dashboard/home page after successful login
-      // We will create the dashboard later
-      navigate('/dashboard'); 
-      window.location.reload(); // Force reload to update app state
+      // --- CHANGE THIS LINE ---
+      navigate('/announcements'); // Changed from '/dashboard'
+      // -----------------------
+
+      window.location.reload(); 
 
     } catch (err) {
       const message =
