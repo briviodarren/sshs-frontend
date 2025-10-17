@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import authService from '../services/authService';
 
-// Accept setUser as a prop from App.jsx
-const LoginPage = ({ setUser }) => {
+const LoginPage = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -29,13 +28,13 @@ const LoginPage = ({ setUser }) => {
     }));
   };
 
-const onSubmit = async (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
     try {
       const userData = { email, password };
-      const loggedInUser = await authService.login(userData);
+      await authService.login(userData);
 
       if (rememberMe) {
         localStorage.setItem('rememberedEmail', email);
@@ -43,12 +42,13 @@ const onSubmit = async (e) => {
         localStorage.removeItem('rememberedEmail');
       }
       
-      setUser(loggedInUser);
-      navigate('/announcements');
+      // Redirects to the dashboard
+      navigate('/dashboard'); 
+      
+      // Forces a page reload
+      window.location.reload();
 
-    // --- THIS IS THE CORRECTED LINE ---
     } catch (err) {
-    // ---------------------------------
       const message =
         (err.response && err.response.data && err.response.data.message) ||
         err.message ||
@@ -57,7 +57,7 @@ const onSubmit = async (e) => {
     }
   };
 
-  // The JSX for the form remains exactly the same
+  // The JSX for the form remains the same
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-xl shadow-lg">
