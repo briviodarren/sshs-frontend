@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://sshs-backend-cvf9cbkpv-briviodarrens-projects.vercel.app/api/users/';
+const API_URL = 'https://sshs-backend.vercel.app/api/users/';
 
 // Login user
 const login = async (userData) => {

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // The API_URL must point to the specific endpoint for announcements
-const API_URL = 'https://sshs-backend-cvf9cbkpv-briviodarrens-projects.vercel.app/api/announcements/';
+const API_URL = 'https://sshs-backend.vercel.app/api/announcements/';
 
 const getToken = () => {
   const user = JSON.parse(localStorage.getItem('user'));
