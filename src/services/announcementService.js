@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/announcements/';
+const API_URL = 'https://sshsbackend-wscb0c1s.b4a.run/api/users/';
 
 const getToken = () => {
   const user = JSON.parse(localStorage.getItem('user'));
