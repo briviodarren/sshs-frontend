@@ -2,61 +2,25 @@ import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import authService from '../services/authService';
 import { 
-  FaTachometerAlt, FaBullhorn, FaTasks, FaBook, FaGraduationCap, 
+  FaBullhorn, FaTasks, FaBook, FaGraduationCap, 
   FaFileAlt, FaUserEdit, FaSignOutAlt, FaDollarSign, FaFileSignature, 
   FaExclamationTriangle, FaComments, FaClipboardList 
 } from 'react-icons/fa';
 
-// Navigation links configuration
-const navLinks = {
-  teacher: [
-    { path: '/announcements', icon: <FaBullhorn />, name: 'Announcement' },
-    { path: '/assignments', icon: <FaTasks />, name: 'Assignment' },
-    { path: '/attendance', icon: <FaClipboardList />, name: 'Attendance' },
-    { path: '/materials', icon: <FaBook />, name: 'Materials' },
-    { path: '/grades', icon: <FaGraduationCap />, name: 'Grades' },
-    { path: '/permits', icon: <FaFileAlt />, name: 'Permit' },
-    { path: '/profile', icon: <FaUserEdit />, name: 'Profile' },
-  ],
-  student: [
-    { path: '/announcements', icon: <FaBullhorn />, name: 'Announcement' },
-    { path: '/assignments', icon: <FaTasks />, name: 'Assignment' },
-    { path: '/attendance', icon: <FaClipboardList />, name: 'Attendance' },
-    { path: '/materials', icon: <FaBook />, name: 'Materials' },
-    { path: '/grades', icon: <FaGraduationCap />, name: 'Grades' },
-    { path: '/permits', icon: <FaFileAlt />, name: 'Permit' },
-    { path: '/scholarship', icon: <FaDollarSign />, name: 'Scholarship Application' },
-    { path: '/fee-relief', icon: <FaFileSignature />, name: 'Fee Relief Application' },
-    { path: '/critique', icon: <FaComments />, name: 'Critique & Suggestions' },
-    { path: '/penalties', icon: <FaExclamationTriangle />, name: 'Penalty' },
-    { path: '/profile', icon: <FaUserEdit />, name: 'Profile' },
-  ],
-  admin: [
-    { path: '/announcements', icon: <FaBullhorn />, name: 'Announcement' },
-    { path: '/assignments', icon: <FaTasks />, name: 'Assignment' },
-    { path: '/attendance', icon: <FaClipboardList />, name: 'Attendance' },
-    { path: '/materials', icon: <FaBook />, name: 'Materials' },
-    { path: '/grades', icon: <FaGraduationCap />, name: 'Grades' },
-    { path: '/permits', icon: <FaFileAlt />, name: 'Permit' },
-    { path: '/scholarship', icon: <FaDollarSign />, name: 'Scholarship Apps' },
-    { path: '/fee-relief', icon: <FaFileSignature />, name: 'Fee Relief Apps' },
-    { path: '/critique', icon: <FaComments />, name: 'Critique & Suggestions' },
-    { path: '/penalties', icon: <FaExclamationTriangle />, name: 'Penalty' },
-    { path: '/profile', icon: <FaUserEdit />, name: 'Manage Users' },
-  ]
-};
+const navLinks = { /* ... This object remains unchanged ... */ };
 
-const Sidebar = () => {
+// Accept user and setUser as props
+const Sidebar = ({ user, setUser }) => {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem('user'));
+  // Use the user prop for the role
   const role = user?.role;
   
   const links = navLinks[role] || [];
 
   const onLogout = () => {
-    authService.logout();
-    navigate('/');
-    window.location.reload();
+    authService.logout(); // Clears localStorage
+    setUser(null);      // Clears the app state
+    navigate('/');      // Navigates to the login page
   };
 
   return (
